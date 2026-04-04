@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'products',
+    "orders",
+    "payments",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -109,6 +114,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL = "users.User"
 
 
 # Static files (CSS, JavaScript, Images)
