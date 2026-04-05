@@ -119,6 +119,9 @@ USE_TZ = True
 
 AUTH_USER_MODEL = "users.User"
 
+PROTOCOL="http"
+DOMAIN="127.0.0.1:8000"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
