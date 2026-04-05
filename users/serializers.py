@@ -45,14 +45,14 @@ class PasswordResetRequestSerializer(serializers.Serializer):
                send_mail(
                     "Password rset request",
                     f"kindly reset your password via this link:{reset_link}",
-                    "creativeeconomy@gmail.com"
+                    "creativeeconomy@gmail.com",
                     [user.email]
                )  
           return attrs
 
 
 class NewPasswordSerializer(serializers.Serializer):
-     password = serializers.CharField(max_lenth=10)
+     password = serializers.CharField(max_length=10)
      uidb64 = serializers.CharField()
      token = serializers.CharField()
 

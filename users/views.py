@@ -32,3 +32,30 @@ class LogoutRequestView(APIView):
         except Exception:
             return Response({"error":"invalid token"}, status=status.HTTP_400_BAD_REQUEST)
         
+
+class PasswordResetView(generics.GenericAPIView):
+    serializer_class = PasswordResetRequestSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({"message" :"email sent successfully"})
+    
+
+
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    serializer_class = NewPasswordSerializer
+    
+    def post(self, request, uidb64, token):
+        serializer = self.get_serializer(
+            data={
+                'password': request.data.get('password'),
+                'uidb64': uidb64,
+                'token': token
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        return Response({"detail": "Password reset successful."}  )  
+
+            
