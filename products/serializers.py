@@ -23,6 +23,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'price',
+            'stock_count',
             'category',
             'category_name',
             'category_parent',
