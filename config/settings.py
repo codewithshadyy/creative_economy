@@ -153,7 +153,9 @@ REST_FRAMEWORK = {
      'DEFAULT_THROTTLE_RATES': {
         'user': '100/day',
         'anon': '10/hour'
-    }
+    },
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 
