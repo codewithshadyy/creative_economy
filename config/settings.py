@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "orders",
     "payments",
     "rest_framework",
+    "django_filters"
     
 ]
 
