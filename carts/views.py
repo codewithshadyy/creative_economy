@@ -4,6 +4,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import CartSerializer, CartItemSerializer
 from .models import Cart, CartItem
 
+
+
+
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
@@ -14,3 +17,10 @@ class CartViewSet(viewsets.ModelViewSet):
     
     # def perform_create(self, serializer):
     #     return serializer.save(user=self.request.user)
+
+class CartItemViewSet(viewsets.ModelViewSet):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+    permission_classes = [IsAuthenticated]
+    
+        
