@@ -7,10 +7,10 @@ from .models import Cart, CartItem
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+    # def get_queryset(self):
+    #     return Cart.objects.filter(user=self.request.user)
     
-    def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     return serializer.save(user=self.request.user)
