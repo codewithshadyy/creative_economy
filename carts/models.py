@@ -8,7 +8,7 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Cart-{self.user_id}"
+        return f"Cart-{self.user}"
     
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
@@ -19,5 +19,8 @@ class CartItem(models.Model):
         unique_together = ["cart", "product"]
 
     def __str__(self):
-        product_name = self.product.name if self.product_id and self.product.name else "Unknown Product"
-        return f"{product_name} (Qty: {self.quantity})"     
+        return f"{self.product.name} ({self.product})" 
+
+    # def get_or_create_cart(self):
+    #     cart, created = Cart.objects.get_or_create(user=User)
+    #     return cart       

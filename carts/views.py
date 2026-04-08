@@ -6,57 +6,61 @@ from .models import Cart, CartItem
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from products.models import Product
 
 
 
-class CartViewSet(viewsets.ModelViewSet):
+
+class CartViewSet(viewsets.ViewSet):
     queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-    permission_classes = [AllowAny]
-
-    # def get_queryset(self):
-    #     return Cart.objects.filter(user=self.request.user)
     
-    # def perform_create(self, serializer):
-    #     return serializer.save(user=self.request.user)
+    permission_classes = [IsAuthenticated]
     
-   
-class CartItemViewset(viewsets.ModelViewSet):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-    permission_classes = [AllowAny]
 
+    def get_cart(self, user):
+        cart, _ = Cart.objects.get_or_create(user=user)
+        return cart
 
-#     def get_queryset(self):
-#         return CartItem.objects.all()
-    
-#     def perform_create(self, serializer):
-#         return serializer.save(user=self.request.user)
+    def list(self, request):
+        cart = self.get_cart(request.user)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
 
-#     @action(detail=True, methods=["post"])
-#     def add_item(self,request, pk=None):
-#         cart = self.get_object()
-#         product_id = request.data.get("product")
-#         quantity = int(request.data.get("quanity", ))
+    @action(detail=False, methods=['post'])
+    def add(self, request):
+        cart = self.get_cart(request.user)
 
+        product_id = request.data.get('product')
+        quantity = request.data.get('quantity', 1)
 
-#         item, created = CartItem.objects.get_or_create(
-#             cart=cart,
-#             product_id=product_id,
-#             defaults={'quantity': quantity}
+        
+        if not product_id:
+            return Response({"error": "Product is required"}, status=400)
 
-#         )  
+        
+        try:
+            quantity = int(quantity)
+            if quantity <= 0:
+                return Response({"error": "Quantity must be > 0"}, status=400)
+        except:
+            return Response({"error": "Invalid quantity"}, status=400)
 
-
-#         if not created:
-#             item.quantity += quantity
-#             item.save()
-
-#         return Response({"message":"Added  to Cart"}, status=status.HTTP_201_CREATED)          
-                 
-
-
-
-
-
+        
        
+        product = Product.objects.filter(id=product_id).first()
+
+        if not product:
+            return Response({"error": "Product not found"}, status=404)
+
+        item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,  
+            defaults={'quantity': quantity}
+        )
+
+        if not created:
+            item.quantity += quantity
+            item.save()
+
+        return Response({"message": "Item added to cart"})
+
